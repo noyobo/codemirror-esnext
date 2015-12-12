@@ -1,0 +1,26 @@
+{
+  "name": "codemirror-esnext",
+  "version": "0.1.0",
+  "description": "codemirror mode for ECMAscript 6/7",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noyobo/codemirror-esnext.git"
+  },
+  "keywords": [
+    "codemirror",
+    "codemirror-jsx",
+    "codemirror-react",
+    "codemirror-es6",
+    "codemirror-es7"
+  ],
+  "author": "noyobo <noyobo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/noyobo/codemirror-esnext/issues"
+  },
+  "homepage": "https://github.com/noyobo/codemirror-esnext#readme"
+}

@@ -4,8 +4,8 @@
   "description": "codemirror mode for ECMAscript 6/7",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "eslint": "eslint ./src"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,8 @@
   },
   "devDependencies": {
     "codemirror": "~5.9.0",
+    "eslint": "~1.10.3",
+    "eslint-config-airbnb": "^2.0.0",
     "koa": "~1.1.2",
     "koa-serve-index": "~1.1.1",
     "koa-static": "~1.5.2"

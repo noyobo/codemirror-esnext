@@ -1,0 +1,122 @@
+.CodeMirror {
+    background-color: #222;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    color: #f8f8f2;
+    height: 600px;
+    font: 14px/1.3 'Consolas', 'Monaco', 'Andale Mono', 'monospace';
+    .CodeMirror-code > div:hover {
+        background-color: #242424;
+    }
+    .CodeMirror-linenumbers {
+        padding: 0 0 0 8px;
+        border: 1px solid #222;
+    }
+}
+
+
+/* Based on Sublime Text's Monokai theme */
+
+.cm-s-xtemplate {
+    .CodeMirror {
+        background: #272822;
+        color: #f8f8f2;
+    }
+    div.CodeMirror-selected {
+        background: #49483E;
+    }
+    .CodeMirror-line::selection,
+    .CodeMirror-line > span::selection,
+    .CodeMirror-line > span > span::selection {
+        background: rgba(73, 72, 62, .99);
+    }
+    .CodeMirror-line::-moz-selection,
+    .CodeMirror-line > span::-moz-selection,
+    .CodeMirror-line > span > span::-moz-selection {
+        background: rgba(73, 72, 62, .99);
+    }
+    .CodeMirror-gutters {
+        background: #272822;
+        border-right: 0px;
+    }
+    .CodeMirror-guttermarker {
+        color: white;
+    }
+    .CodeMirror-guttermarker-subtle {
+        color: #d0d0d0;
+    }
+    .CodeMirror-linenumber {
+        color: #d0d0d0;
+    }
+    .CodeMirror-cursor {
+        border-left: 1px solid #f8f8f0;
+    }
+    span.cm-comment {
+        color: #75715e;
+    }
+    span.cm-atom {
+        color: #ae81ff;
+    }
+    span.cm-number {
+        color: #ae81ff;
+    }
+    span.cm-property,
+    span.cm-attribute {
+        color: #a6e22e;
+    }
+    span.cm-keyword {
+        color: #f92672;
+    }
+    span.cm-operator {
+        color: #f92672;
+    }
+    span.cm-string {
+        color: #e6db74;
+    }
+    span.cm-variable {
+        color: #f8f8f2;
+    }
+    span.cm-variable-2 {
+        color: #9effff;
+    }
+    span.cm-variable-3 {
+        color: #66d9ef;
+    }
+    span.cm-def {
+        color: #fd971f;
+    }
+    span.cm-tag {
+        color: #f92672;
+    }
+    span.cm-bracket {
+        color: #EAEAC9;
+    }
+    span.cm-header {
+        color: #ae81ff;
+    }
+    span.cm-link {
+        color: #ae81ff;
+    }
+    span.cm-error {
+        background: #f92672;
+        color: #f8f8f0;
+    }
+    .CodeMirror-activeline-background {
+        background: #373831;
+    }
+    .CodeMirror-matchingbracket {
+        text-decoration: underline;
+        color: white !important;
+    }
+    span.cm-indent {
+        background: #232323;
+    }
+    span.cm-builtin {
+        color: #3496dc;
+        font-weight: bold;
+    }
+    span.cm-entity {
+        font-style: italic;
+        color: #66d6ef;
+    }
+}

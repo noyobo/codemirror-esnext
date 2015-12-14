@@ -1,13 +1,11 @@
 <!doctype html>
-
 <title>CodeMirror: Sublime Text bindings demo</title>
-<meta charset="utf-8"/>
-
+<meta charset="utf-8" />
 <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="../node_modules/codemirror/addon/fold/foldgutter.css">
 <link rel="stylesheet" href="../node_modules/codemirror/addon/dialog/dialog.css">
-<link rel="stylesheet" href="../node_modules/codemirror/theme/monokai.css">
-<link rel="stylesheet" href="../src/index.css">
+<!-- <link rel="stylesheet" href="../node_modules/codemirror/theme/monokai.css"> -->
+<link rel="stylesheet" href="../src/xtemplate.css">
 
 <script src="../node_modules/codemirror/lib/codemirror.js"></script>
 <script src="../node_modules/codemirror/addon/search/searchcursor.js"></script>
@@ -19,26 +17,32 @@
 <script src="../node_modules/codemirror/addon/wrap/hardwrap.js"></script>
 <script src="../node_modules/codemirror/addon/fold/foldcode.js"></script>
 <script src="../node_modules/codemirror/addon/fold/brace-fold.js"></script>
+
 <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
+<script src="../node_modules/codemirror/mode/coffeescript/coffeescript.js"></script>
 <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
-<script src="../node_modules/codemirror/mode/jsx/jsx.js"></script>
 <script src="../node_modules/codemirror/keymap/sublime.js"></script>
-
-
+<script src="../src/codemirror-esnext.js"></script>
+<script src="../src/abc.js"></script>
+<script src="./code.js"></script>
 <article>
-<script>
-  var value = 'import React from \'react\';\n\nexport default class index extends React.Component {\n  static propTypes = {\n    name: React.PropTypes.string,\n  }\n\n  constructor(props) {\n    super(props);\n  }\n\n  render() {\n    return (\n      <div></div>\n    );\n  }\n}\n';
-  var editor = CodeMirror(document.body.getElementsByTagName("article")[0], {
-    value: value,
-    lineNumbers: true,
-    mode: "jsx",
-    keyMap: "sublime",
-    autoCloseBrackets: true,
-    matchBrackets: true,
-    showCursorWhenSelecting: true,
-    theme: "monokai",
-    tabSize: 2
-  });
-</script>
-
+    <script>
+    var value = 'class{\n  abc() {\n    console.log(123);\n  }\n}';
+    value = ''
+    var editor = CodeMirror(document.body.getElementsByTagName("article")[0], {
+        value: value || code,
+        lineNumbers: true,
+        mode: "ecmascript",
+        // mode: "coffeescript",
+        keyMap: "sublime",
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        showCursorWhenSelecting: true,
+        theme: "xtemplate",
+        tabSize: 2
+    });
+    editor.on('change', function(instance, changeObj) {
+      console.log(instance.getValue());
+    })
+    </script>
 </article>

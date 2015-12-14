@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../node_modules/codemirror/addon/fold/foldgutter.css">
 <link rel="stylesheet" href="../node_modules/codemirror/addon/dialog/dialog.css">
 <!-- <link rel="stylesheet" href="../node_modules/codemirror/theme/monokai.css"> -->
-<link rel="stylesheet" href="../src/xtemplate.css">
+<link rel="stylesheet" href="../src/monikai-esnext.css">
 
 <script src="../node_modules/codemirror/lib/codemirror.js"></script>
 <script src="../node_modules/codemirror/addon/search/searchcursor.js"></script>
@@ -32,7 +32,7 @@
     var editor = CodeMirror(document.body.getElementsByTagName("article")[0], {
         value: value || code,
         lineNumbers: true,
-        mode: "ecmascript",
+        mode: "esnext",
         // mode: "coffeescript",
         keyMap: "sublime",
         autoCloseBrackets: true,

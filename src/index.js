@@ -1,2 +1,0 @@
-var CodeMirror = require('codemirror');
-

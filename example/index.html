@@ -13,6 +13,7 @@
 <script src="../node_modules/codemirror/addon/edit/matchbrackets.js"></script>
 <script src="../node_modules/codemirror/addon/edit/closebrackets.js"></script>
 <script src="../node_modules/codemirror/addon/comment/comment.js"></script>
+<script src="../node_modules/codemirror/addon/comment/continuecomment.js"></script>
 <script src="../node_modules/codemirror/addon/wrap/hardwrap.js"></script>
 <script src="../node_modules/codemirror/addon/fold/foldcode.js"></script>
 <script src="../node_modules/codemirror/addon/fold/brace-fold.js"></script>
@@ -36,10 +37,14 @@
     matchBrackets: true,
     showCursorWhenSelecting: true,
     theme: "monikai-esnext",
-    tabSize: 2
+    tabSize: 2,
+    continueComments: "Enter",
+    extraKeys: {
+      "Ctrl-Q": "toggleComment"
+    }
   });
   editor.on('change', function(instance, changeObj) {
-    console.log(instance.getValue());
+    // console.log(instance.getValue());
   })
   </script>
 </article>

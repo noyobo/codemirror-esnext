@@ -1,6 +1,10 @@
 {
-  "extends": "airbnb/base",
+  "extends": "defaults/configurations/google",
   "rules": {
     "id-length": [0],
+    "newline-after-var": [0]
+  },
+  "globals": {
+    "CodeMirror": true
   }
 }

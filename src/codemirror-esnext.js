@@ -3,25 +3,29 @@ CodeMirror.defineMode('esnext', function(conf, parserConf) {
   var isOperatorChar = /[+\-*&%=<>!?|~^]/;
 
   function readRegexp(stream) {
-    var escaped = false,
-      next, inSet = false;
+    var escaped = false;
+    var inSet = false;
+    var next;
     while ((next = stream.next()) != null) {
       if (!escaped) {
-        if (next == "/" && !inSet) return;
-        if (next == "[") inSet = true;
-        else if (inSet && next == "]") inSet = false;
+        if (next === '/' && !inSet) {
+          return;
+        }
+        if (next === '[') {
+          inSet = true;
+        } else if (inSet && next == ']') {
+          inSet = false;
+        }
       }
-      escaped = !escaped && next == "\\";
+      escaped = !escaped && next == '\\';
     }
   }
 
-  // comment token 
+  // comment token
   function tokenComment(stream, state) {
     var maybeEnd = false;
     var ch;
-    var pch = stream.peek()
     while (ch = stream.next()) {
-      console.log('a', ch, 's', pch, stream.string);
       if (ch === '@') {
         state.scope.type = 'comment';
         state.tokenize = tokenCommentProperty;
@@ -32,8 +36,7 @@ CodeMirror.defineMode('esnext', function(conf, parserConf) {
         state.scope.type = 'sol';
         break;
       }
-      maybeEnd = (ch === '*');
-      console.log(maybeEnd);
+      maybeEnd = ch === '*';
     }
     return 'comment';
   }
@@ -93,8 +96,7 @@ CodeMirror.defineMode('esnext', function(conf, parserConf) {
         tokenize: tokenBase,
         scope: {
           offset: basecolumn || 0,
-          type: 'sol',
-          offset: 0
+          type: 'sol'
         },
         prop: false,
         indented: 0

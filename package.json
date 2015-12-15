@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "eslint": "eslint ./src"
+    "lint": "eslint ./src/codemirror-esnext.js  --fix"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "codemirror": "~5.9.0",
     "eslint": "~1.10.3",
-    "eslint-config-airbnb": "^2.0.0",
+    "eslint-config-defaults": "~7.1.1",
     "koa": "~1.1.2",
     "koa-serve-index": "~1.1.1",
     "koa-static": "~1.5.2"

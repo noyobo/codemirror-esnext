@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="../node_modules/codemirror/addon/dialog/dialog.css">
 <!-- <link rel="stylesheet" href="../node_modules/codemirror/theme/monokai.css"> -->
 <link rel="stylesheet" href="../src/monikai-esnext.css">
-
 <script src="../node_modules/codemirror/lib/codemirror.js"></script>
 <script src="../node_modules/codemirror/addon/search/searchcursor.js"></script>
 <script src="../node_modules/codemirror/addon/search/search.js"></script>
@@ -17,32 +16,30 @@
 <script src="../node_modules/codemirror/addon/wrap/hardwrap.js"></script>
 <script src="../node_modules/codemirror/addon/fold/foldcode.js"></script>
 <script src="../node_modules/codemirror/addon/fold/brace-fold.js"></script>
-
 <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
 <script src="../node_modules/codemirror/mode/coffeescript/coffeescript.js"></script>
 <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
 <script src="../node_modules/codemirror/keymap/sublime.js"></script>
 <script src="../src/codemirror-esnext.js"></script>
-<script src="../src/abc.js"></script>
 <script src="./code.js"></script>
 <article>
-    <script>
-    var value = 'class{\n  abc() {\n    console.log(123);\n  }\n}';
-    value = ''
-    var editor = CodeMirror(document.body.getElementsByTagName("article")[0], {
-        value: value || code,
-        lineNumbers: true,
-        mode: "esnext",
-        // mode: "coffeescript",
-        keyMap: "sublime",
-        autoCloseBrackets: true,
-        matchBrackets: true,
-        showCursorWhenSelecting: true,
-        theme: "xtemplate",
-        tabSize: 2
-    });
-    editor.on('change', function(instance, changeObj) {
-      console.log(instance.getValue());
-    })
-    </script>
+  <script>
+  var value = 'class{\n  abc() {\n    console.log(123);\n  }\n}';
+  value = ''
+  var editor = CodeMirror(document.body.getElementsByTagName("article")[0], {
+    value: value || code,
+    lineNumbers: true,
+    mode: "esnext",
+    // mode: "coffeescript",
+    keyMap: "sublime",
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    showCursorWhenSelecting: true,
+    theme: "monikai-esnext",
+    tabSize: 2
+  });
+  editor.on('change', function(instance, changeObj) {
+    console.log(instance.getValue());
+  })
+  </script>
 </article>

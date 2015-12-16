@@ -3,6 +3,22 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
   var indentUnit = config.indentUnit;
   var isOperatorChar = /[+\-*&%=<>!?|~^]/;
 
+  // Used as scratch variables to communicate multiple values without
+  // consing up tons of objects.
+  var type;
+  var content;
+
+  function restyle(tp, style, cont) {
+    var styleArr = [];
+    type = tp;
+    content = cont;
+    styleArr.push(tp);
+    if (style) {
+      styleArr.push(style);
+    }
+    return styleArr.join(' ');
+  }
+
   function readRegexp(stream) {
     var escaped = false;
     var inSet = false;
@@ -66,17 +82,15 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
     if (!stream.eol()) {
       ch = stream.next();
       if (ch === '$' && stream.eat('{')) {
-        state.scope.type = 'quasi';
         state.tokenize = tokenQuasiVariable;
-        return 'string-2';
+        return restyle('string', 'string-2');
       }
       if (ch === '`') {
-        state.scope.type = 'normal';
         state.tokenize = tokenBase;
-        return 'string-2';
+        return restyle('string', 'string-2');
       }
       stream.eatWhile(/[^\`\$]/);
-      return 'string';
+      return restyle('string', 'string');
     }
   }
 
@@ -90,7 +104,7 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
       }
       stream.next();
     }
-    return 'comment def';
+    return restyle('comment', 'def');
   }
 
   // comment token
@@ -99,18 +113,16 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
     var ch;
     while (ch = stream.next()) {
       if (ch === '@') {
-        state.scope.type = 'comment';
         state.tokenize = tokenCommentProperty;
         break;
       }
       if (ch === '/' && maybeEnd) {
         state.tokenize = tokenBase;
-        state.scope.type = 'normal';
         break;
       }
       maybeEnd = ch === '*';
     }
-    return 'comment';
+    return restyle('comment');
   }
 
   function tokenBase(stream, state) {
@@ -120,43 +132,38 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
       if (stream.eatSpace()) {
         var lineOffset = stream.indentation();
         if (lineOffset) {
-          return 'indent';
+          return restyle('indent');
         }
         return null;
       }
     }
-    
+
     if (stream.eatSpace()) {
       return null;
     }
-
-    if (state.scope.type === 'comment') {
-      state.tokenize = tokenComment;
-      return state.tokenize(stream, state);
-    }
+    
     var ch = stream.next();
     if (ch == '"' || ch == "'") { // eslint-disable-line quotes
       state.tokenize = tokenFactory(stream.current(), false, 'string');
       return state.tokenize(stream, state);
     } else if (ch == '`') {
       state.tokenize = tokenQuasi;
-      return 'string-2';
+      return restyle('string', 'string-2');
     } else if (ch === '/') {
       if (stream.eat('*')) {
         state.tokenize = tokenComment;
-        state.scope.type = 'comment';
         return tokenComment(stream, state);
       } else if (stream.eat('/')) {
         stream.skipToEnd();
-        return 'comment';
+        return restyle('comment');
       } else if (/^(?:operator|normal|keyword c|case|new|[\[{}\(,;:])$/.test(
-          state.scope.type)) {
+          state.lastType)) {
         readRegexp(stream);
         stream.match(/^\b(([gimyu])(?![gimyu]*\2))+\b/);
-        return 'regexp';
+        return restyle('regexp');
       } else {
         stream.eatWhile(isOperatorChar);
-        return 'operator';
+        return restyle('operator');
       }
     }
     return ERRORCLASS;

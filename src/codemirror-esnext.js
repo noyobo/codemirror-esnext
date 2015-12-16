@@ -1,27 +1,7 @@
 CodeMirror.defineMode('esnext', function(config, parserConf) {
   var ERRORCLASS = 'error';
-  var indentUnit = config.indentUnit
+  var indentUnit = config.indentUnit;
   var isOperatorChar = /[+\-*&%=<>!?|~^]/;
-
-  // Parser
-
-  var atomicTypes = {
-    "atom": true,
-    "number": true,
-    "variable": true,
-    "string": true,
-    "regexp": true,
-    "this": true
-  };
-
-  function JSLexical(indented, column, type, align, prev, info) {
-    this.indented = indented;
-    this.column = column;
-    this.type = type;
-    this.prev = prev;
-    this.info = info;
-    if (align != null) this.align = align;
-  }
 
   function readRegexp(stream) {
     var escaped = false;
@@ -46,7 +26,7 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
     return function(stream, state) {
       while (!stream.eol()) {
         stream.eatWhile(/[^'"\/\\]/);
-        if (stream.eat("\\")) {
+        if (stream.eat('\\')) {
           stream.next();
           if (singleline && stream.eol()) {
             return outclass;
@@ -70,36 +50,39 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
   }
 
   function tokenQuasiVariable(stream, state) {
-    while (ch = stream.next()) {
+    var ch;
+    if (ch = stream.next()) {
       if (ch === '}') {
         state.tokenize = tokenQuasi;
-        return 'keyword'
-        break;
+        return 'string-2';
       }
-      return 'variable'
+      return 'variable';
     }
   }
 
   function tokenQuasi(stream, state) {
     var maybeEnd = false;
-    while (!stream.eol()) {
+    var ch;
+    if (!stream.eol()) {
       ch = stream.next();
       if (ch === '$' && stream.eat('{')) {
         state.scope.type = 'quasi';
         state.tokenize = tokenQuasiVariable;
-        return 'string-2'
+        return 'string-2';
       }
       if (ch === '`') {
         state.scope.type = 'normal';
         state.tokenize = tokenBase;
-        return 'string-2'
+        return 'string-2';
       }
-      return 'string'
+      stream.eatWhile(/[^\`\$]/);
+      return 'string';
     }
   }
 
   // super jsdoc defined property multi line comments
   function tokenCommentProperty(stream, state) {
+    var ch;
     while (ch = stream.peek()) {
       if (ch === '*' || ch === ':' || ch === ' ' || stream.eol()) {
         state.tokenize = tokenComment;
@@ -142,16 +125,20 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
         return null;
       }
     }
+    
+    if (stream.eatSpace()) {
+      return null;
+    }
 
-    var ch = stream.next();
     if (state.scope.type === 'comment') {
       state.tokenize = tokenComment;
       return state.tokenize(stream, state);
     }
-    if (ch == '"' || ch == "'") {
-      state.tokenize = tokenFactory(stream.current(), false, "string");
+    var ch = stream.next();
+    if (ch == '"' || ch == "'") { // eslint-disable-line quotes
+      state.tokenize = tokenFactory(stream.current(), false, 'string');
       return state.tokenize(stream, state);
-    } else if (ch == "`") {
+    } else if (ch == '`') {
       state.tokenize = tokenQuasi;
       return 'string-2';
     } else if (ch === '/') {
@@ -179,7 +166,6 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
     startState: function(basecolumn) {
       return {
         tokenize: tokenBase,
-        lexical: new JSLexical((basecolumn || 0) - indentUnit, 0, "block", false),
         scope: {
           offset: basecolumn || 0,
           type: 'normal',

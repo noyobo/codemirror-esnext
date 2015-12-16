@@ -4,11 +4,11 @@
 /**
  * @author
  */
-import 'rc-time-picker/assets/index.css';
+import aa from 'rc-time-picker/assets/index.css';
 
 `sfsdfsfsafs${word}`
 `
- There are <b>${basket.count}</b> items 
+here are <b>${basket.count}</b> items 
 in your basket, <em>${basket.onSale}</em> 
 are on sale! 
 `
@@ -18,6 +18,9 @@ const now = new GregorianCalendar(zhCn);
 now.setTime(Date.now());
 
 const App = React.createClass({
+  constructor() {
+    
+  }
   getInitialState() {
     return {
       value: now,

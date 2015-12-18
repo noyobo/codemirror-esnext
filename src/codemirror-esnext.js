@@ -1,22 +1,33 @@
 CodeMirror.defineMode('esnext', function(config, parserConf) {
   var ERRORCLASS = 'error';
   var indentUnit = config.indentUnit;
-  var isOperatorChar = /[+\-*&%=<>!?|~^]/;
+  var isOperatorChar = /[+\-*&%=<>!?|~^]|\.\.\./;
 
-  // Used as scratch variables to communicate multiple values without
-  // consing up tons of objects.
+  function wordRegexp(words) {
+    return new RegExp('^((' + words.join(')|(') + '))\\b');
+  }
+  var reservedKeywords = ['break', 'case', 'catch', 'continue', 'debugger', 'default', 'delete', 'do', 'else', 'export', 'finally', 'for', 'if', 'import', 'from', 'in', 'return', 'switch', 'this', 'throw', 'try', 'void', 'while', 'with'];
+  var operatorKeyworks = ['var', 'const', 'let', 'class', 'extends', 'function', 'of', 'in', 'instanceof', 'typeof', 'super', 'void', 'yield', 'new', 'constructor'];
+  var futureReservedKeywords = ['enum', 'await', 'implements', 'package', 'protected', 'static', 'interface', 'private', 'public', 'abstract', 'boolean', 'byte', 'char', 'double', 'final', 'float', 'goto', 'int', 'long', 'native'];
+
+  var domKeyworks = ['document'];
+
+  var builtinKeyworks = ['constructor', 'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'escape', 'eval', 'hasOwnProperty', 'isFinite', 'isNaN', 'isPrototypeOf', 'parseFloat', 'parseInt', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'unescape', 'valueOf', 'yield'];
+  var entityKeyworks = ['Array', 'ArrayBuffer', 'Boolean', 'DataView', 'Date', 'Float32Array', 'Float64Array', 'Function', 'Infinity', 'Int16Array', 'Int32Array', 'Int8Array', 'JSON', 'Map', 'Math', 'NaN', 'Number', 'Object', 'Promise', 'Proxy', 'Reflect', 'RegExp', 'Set', 'String', 'Symbol', 'System', 'TypeError', 'Uint16Array', 'Uint32Array', 'Uint8Array', 'Uint8ClampedArray', 'WeakMap', 'WeakSet'];
+
+  var keywords = wordRegexp(reservedKeywords.concat(futureReservedKeywords))
+  operatorKeyworks = wordRegexp(operatorKeyworks);
+  builtinKeyworks = wordRegexp(builtinKeyworks);
+  entityKeyworks = wordRegexp(entityKeyworks.concat(domKeyworks));
+
+
   var type;
   var content;
 
   function restyle(tp, style, cont) {
-    var styleArr = [];
     type = tp;
     content = cont;
-    styleArr.push(tp);
-    if (style) {
-      styleArr.push(style);
-    }
-    return styleArr.join(' ');
+    return style;
   }
 
   function readRegexp(stream) {
@@ -122,7 +133,7 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
       }
       maybeEnd = ch === '*';
     }
-    return restyle('comment');
+    return restyle('comment', 'comment');
   }
 
   function tokenBase(stream, state) {
@@ -132,7 +143,7 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
       if (stream.eatSpace()) {
         var lineOffset = stream.indentation();
         if (lineOffset) {
-          return restyle('indent');
+          return restyle('indent', 'indent');
         }
         return null;
       }
@@ -141,8 +152,43 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
     if (stream.eatSpace()) {
       return null;
     }
-    
+
+    if (stream.match(keywords)) {
+      return 'keyword';
+    }
+
+    if (stream.match(operatorKeyworks)) {
+      return 'keyword-2';
+    }
+
+    if (stream.match(builtinKeyworks)) {
+      return 'keyword builtin';
+    }
+
+    if (stream.match(isOperatorChar)) {
+      return 'keyword operator';
+    }
+
+    if (stream.match(entityKeyworks)) {
+      return 'keyword entity';
+    }
+
+    if (stream.match(/[()\[\]{},:=;]/)) {
+      return restyle(stream.current());
+    }
+
+    // if (stream.match(/\.[_a-z]+\s*(?:\()/i)) {
+    //   return 'property';
+    // }
+
+    if (stream.match(/\.[_\$a-z]+/i)) {
+      return 'variable';
+    }
+
+    // if (stream.match()) {}
+
     var ch = stream.next();
+    console.log(ch)
     if (ch == '"' || ch == "'") { // eslint-disable-line quotes
       state.tokenize = tokenFactory(stream.current(), false, 'string');
       return state.tokenize(stream, state);
@@ -155,17 +201,15 @@ CodeMirror.defineMode('esnext', function(config, parserConf) {
         return tokenComment(stream, state);
       } else if (stream.eat('/')) {
         stream.skipToEnd();
-        return restyle('comment');
+        return restyle('comment', 'comment');
       } else if (/^(?:operator|normal|keyword c|case|new|[\[{}\(,;:])$/.test(
           state.lastType)) {
         readRegexp(stream);
         stream.match(/^\b(([gimyu])(?![gimyu]*\2))+\b/);
-        return restyle('regexp');
-      } else {
-        stream.eatWhile(isOperatorChar);
-        return restyle('operator');
+        return restyle('regexp', 'regexp');
       }
     }
+
     return ERRORCLASS;
   }
 
